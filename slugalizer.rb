@@ -47,6 +47,10 @@ if __FILE__ == $0
       assert_slug("acegiklnuo", "āčēģīķļņūö")
     end
     
+    def test_chinese_text
+      assert_slug("chinese-text", "chinese 中文測試 text")
+    end
+    
     def test_stripped_character_then_whitespace
       assert_slug("abc", "! abc !")
     end
