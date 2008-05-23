@@ -3,8 +3,13 @@
 # Slugalizer
 # http://github.com/henrik/slugalizer
 
-require "rubygems"
-require "unicode"
+# Only load rubygems if necessary
+begin
+  require "unicode"
+rescue LoadError
+  require "rubygems"
+  require "unicode"
+end
 
 module Slugalizer
   extend self
