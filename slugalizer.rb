@@ -1,14 +1,9 @@
 #!/usr/bin/env ruby
 #
-# Slugalizer 0.1.6
-#
-# http://termos.vemod.net/slugalizer
-#
-# Released into the public domain
-#
-# Please send bug reports and improvements
-# to christoffer.sawicki@gmail.com
+# Slugalizer
+# http://github.com/henrik/slugalizer
 
+require "rubygems"
 require "unicode"
 
 module Slugalizer

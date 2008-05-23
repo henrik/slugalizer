@@ -9,4 +9,6 @@ You can install that library with `gem install unicode`.
 
 Originally [by Christoffer Sawicki](http://termos.vemod.net/slugalizer).
 
+Modified by [Henrik Nyh](http://henrik.nyh.se).
+
 Released into the public domain.
