@@ -12,8 +12,8 @@ module Slugalizer
   # Supported word separators: - _ +
   def slugalize(text, word_separator = "-")
     Unicode.normalize_KD(text).
-      strip.
       gsub(/[^\w\s\-\+]/n, "").
+      strip.
       gsub(/\s+/, word_separator).
       downcase
   end
@@ -45,6 +45,10 @@ if __FILE__ == $0
     
     def test_accented_characters
       assert_slug("acegiklnuo", "āčēģīķļņūö")
+    end
+    
+    def test_stripped_character_then_whitespace
+      assert_slug("abc", "! abc !")
     end
       
     def test_single_whitescape
