@@ -14,7 +14,7 @@ module Slugalizer
     Unicode.normalize_KD(text.to_s).
       gsub(/[^\w\s\-\+]/n, "").
       strip.
-      gsub(/\s+/, word_separator).
+      gsub(/(\s|#{Regexp.escape word_separator})+/, word_separator).
       downcase
   end
 end
@@ -70,6 +70,11 @@ if __FILE__ == $0
     
     def test_excessive_whitescape
       assert_slug("smorgasbord-ar-gott", "smörgåsbord  \n  är  \t   gott")
+    end
+    
+    def test_squeeze_separators
+      assert_slug("a-b", "a - b")
+      assert_slug("a-b", "a--b")
     end
     
     def test_word_separator_parameter
