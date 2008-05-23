@@ -11,7 +11,7 @@ module Slugalizer
   
   # Supported word separators: - _ +
   def slugalize(text, word_separator = "-")
-    Unicode.normalize_KD(text).
+    Unicode.normalize_KD(text.to_s).
       gsub(/[^\w\s\-\+]/n, "").
       strip.
       gsub(/\s+/, word_separator).
@@ -25,6 +25,11 @@ if __FILE__ == $0
   class SlugalizerTest < Test::Unit::TestCase
     def assert_slug(expected_slug, *args)
       assert_equal(expected_slug, Slugalizer.slugalize(*args))
+    end
+    
+    def test_converting_to_string
+      assert_slug("", nil)
+      assert_slug("1", 1)
     end
     
     def test_identity
