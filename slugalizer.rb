@@ -42,6 +42,10 @@ if __FILE__ == $0
     def test_special_characters
       assert_slug("raksmorgas", "räksmörgås!?")
     end
+    
+    def test_accented_characters
+      assert_slug("acegiklnuo", "āčēģīķļņūö")
+    end
       
     def test_single_whitescape
       assert_slug("smorgasbord-e-gott", "smörgåsbord é gott")
