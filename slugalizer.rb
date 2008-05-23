@@ -11,23 +11,11 @@ module Slugalizer
   
   # Supported word separators: - _ +
   def slugalize(text, word_separator = "-")
-    without_kcode do
-      Unicode.normalize_KD(text).
-        strip.
-        gsub(/[^\w\s\-\+]/, "").
-        gsub(/\s+/, word_separator).
-        downcase
-    end
-  end
-  
-  private
-  
-  def without_kcode(&block)
-    old_kcode = $KCODE
-    $KCODE = ""
-    value = block.call
-  ensure
-    $KCODE = old_kcode
+    Unicode.normalize_KD(text).
+      strip.
+      gsub(/[^\w\s\-\+]/n, "").
+      gsub(/\s+/, word_separator).
+      downcase
   end
 end
 
