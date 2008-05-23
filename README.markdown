@@ -7,8 +7,8 @@ Slugalizer is a one-method Ruby library that can slugalize (or slugify) strings,
 
 You can install that library with `gem install unicode`.
 
-Originally [by Christoffer Sawicki](http://termos.vemod.net/slugalizer).
+[Originally]((http://termos.vemod.net/slugalizer) by [Christoffer Sawicki](http://termos.vemod.net/).
 
-Modified by [Henrik Nyh](http://henrik.nyh.se).
+Modified by [Henrik Nyh](http://henrik.nyh.se/).
 
 Released into the public domain.
