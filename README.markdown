@@ -2,10 +2,10 @@ Slugalizer is a one-method Ruby library that can slugalize (or slugify) strings,
 
     Slugalizer.slugalize("Åh, räksmörgåsar!")
     # => "ah-raksmorgasar"
-  
-`iconv`-based solutions are usually [inconsistent between platforms](http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/243426). Slugalizer achieves consistency by using the [`unicode` library](http://www.yoshidam.net/Ruby.html).
+    
+Uses the the [`unicode` library](http://www.yoshidam.net/Ruby.html) (`gem install unicode`) if available.
 
-You can install that library with `gem install unicode`.
+Falls back to `iconv` from the Ruby standard library if `unicode` can't be loaded, but note that this library is [inconsistent between platforms](http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/243426).
 
 [Originally]((http://termos.vemod.net/slugalizer) by [Christoffer Sawicki](http://termos.vemod.net/).
 

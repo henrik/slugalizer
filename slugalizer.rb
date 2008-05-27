@@ -3,25 +3,44 @@
 # Slugalizer
 # http://github.com/henrik/slugalizer
 
-# Only load rubygems if necessary
 begin
-  require "unicode"
+  # Only load rubygems if necessary
+  begin
+    require "unicode"
+  rescue LoadError
+    require "rubygems"
+    require "unicode"
+  end
 rescue LoadError
-  require "rubygems"
-  require "unicode"
+  require 'iconv'
 end
+  
 
 module Slugalizer
   extend self
+  SEPARATORS = %w[- _ +]
   
-  # Supported word separators: - _ +
   def slugalize(text, word_separator = "-")
-    Unicode.normalize_KD(text.to_s).
+    unless SEPARATORS.include?(word_separator)
+      raise "Word separator must be one of #{SEPARATORS}"
+    end
+    transliterate(text.to_s).
       gsub(/[^\w\s\-\+]/n, "").
       strip.
       gsub(/(\s|#{Regexp.escape word_separator})+/, word_separator).
       downcase
   end
+  
+protected
+
+  def transliterate(text)
+    if Object.const_defined?(:Unicode)
+      Unicode.normalize_KD(text)
+    else
+      Iconv.iconv('ascii//translit//IGNORE', 'utf-8', text).to_s
+    end
+  end
+  
 end
 
 if __FILE__ == $0
@@ -86,6 +105,12 @@ if __FILE__ == $0
       assert_slug("smorgasbord-ar-gott", "smörgåsbord är gott", "-")
       assert_slug("smorgasbord_ar_gott", "smörgåsbord är gott", "_")
       assert_slug("smorgasbord+ar+gott", "smörgåsbord är gott", "+")
+    end
+    
+    def test_invalid_word_separator
+      assert_raise(RuntimeError) do
+        Slugalizer.slugalize("smörgåsbord är gott", "@")
+      end
     end
     
     def test_handling_of_word_separator_chars
