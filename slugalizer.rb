@@ -3,18 +3,21 @@
 # Slugalizer
 # http://github.com/henrik/slugalizer
 
-begin
-  # Only load rubygems if necessary
+# Try these libs in turn, using gems if necessary
+%w[active_support/multibyte unicode iconv].each do |lib|
   begin
-    require "unicode"
+    require lib
   rescue LoadError
-    require "rubygems"
-    require "unicode"
+    begin
+      require "rubygems"
+      require lib
+    rescue LoadError
+      next
+    end
   end
-rescue LoadError
-  require 'iconv'
+  break
 end
-  
+
 
 module Slugalizer
   extend self
@@ -34,7 +37,9 @@ module Slugalizer
 protected
 
   def transliterate(text)
-    if Object.const_defined?(:Unicode)
+    if defined?(ActiveSupport::Multibyte)
+      ActiveSupport::Multibyte::Handlers::UTF8Handler.normalize(text, :kd)
+    elsif defined?(Unicode)
       Unicode.normalize_KD(text)
     else
       Iconv.iconv('ascii//translit//IGNORE', 'utf-8', text).to_s
@@ -42,6 +47,7 @@ protected
   end
   
 end
+
 
 if __FILE__ == $0
   require "test/unit"
@@ -128,5 +134,6 @@ if __FILE__ == $0
     ensure
       $KCODE = old_kcode
     end
+
   end
 end
