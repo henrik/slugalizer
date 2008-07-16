@@ -3,19 +3,11 @@
 # Slugalizer
 # http://github.com/henrik/slugalizer
 
-# Try these libs in turn, using gems if necessary
-%w[active_support/multibyte unicode iconv].each do |lib|
-  begin
-    require lib
-  rescue LoadError
-    begin
-      require "rubygems"
-      require lib
-    rescue LoadError
-      next
-    end
-  end
-  break
+begin
+  require "active_support/multibyte"
+rescue LoadError
+  require "rubygems"
+  require "active_support/multibyte"
 end
 
 
