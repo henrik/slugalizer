@@ -19,25 +19,12 @@ module Slugalizer
     unless SEPARATORS.include?(word_separator)
       raise "Word separator must be one of #{SEPARATORS}"
     end
-    transliterate(text.to_s).
+    ActiveSupport::Multibyte::Handlers::UTF8Handler.normalize(text.to_s, :kd).
       gsub(/[^\w\s\-\+]/n, "").
       strip.
       gsub(/(\s|#{Regexp.escape word_separator})+/, word_separator).
       downcase
   end
-  
-protected
-
-  def transliterate(text)
-    if defined?(ActiveSupport::Multibyte)
-      ActiveSupport::Multibyte::Handlers::UTF8Handler.normalize(text, :kd)
-    elsif defined?(Unicode)
-      Unicode.normalize_KD(text)
-    else
-      Iconv.iconv('ascii//translit//IGNORE', 'utf-8', text).to_s
-    end
-  end
-  
 end
 
 
