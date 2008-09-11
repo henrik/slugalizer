@@ -19,10 +19,12 @@ module Slugalizer
     unless SEPARATORS.include?(word_separator)
       raise "Word separator must be one of #{SEPARATORS}"
     end
+    re_separator  = Regexp.escape(word_separator)
     ActiveSupport::Multibyte::Handlers::UTF8Handler.normalize(text.to_s, :kd).
-      gsub(/[^\w\s\-\+]/n, "").
-      strip.
-      gsub(/(\s|#{Regexp.escape word_separator})+/, word_separator).
+      gsub(/[^\x00-\x7F]+/, '').                       # Remove anything non-ASCII entirely (e.g. diacritics).
+      gsub(/[^a-z0-9\-_\+]+/i, word_separator).        # Turn non-slug chars into the separator.
+      squeeze(word_separator).                         # No more than one of the separator in a row.
+      gsub(/^#{re_separator}|#{re_separator}$/i, '').  # Remove leading/trailing separator.
       downcase
   end
 end
@@ -53,8 +55,18 @@ if __FILE__ == $0
       assert_slug("raksmorgas", "RÄKSMÖRGÅS")
     end
     
-    def test_special_characters
-      assert_slug("raksmorgas", "räksmörgås!?")
+    def test_special_characters_outside
+      assert_slug("raksmorgas", " räksmörgås!?.")
+    end
+    
+    def test_special_characters_inside
+      assert_slug("raka-smorgas-nu", "räka@smörgås.nu")
+    end
+    
+    def test_no_leading_or_trailing_separator
+      assert_slug("i-love-c++", "I love C++")
+      assert_slug("i-love-c++", "I love C++!!")
+      assert_slug("i-love-c", "I love C--!!")
     end
     
     def test_accented_characters
