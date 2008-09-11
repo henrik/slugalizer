@@ -113,7 +113,7 @@ if __FILE__ == $0
       assert_slug("abc_-_1_2_3", "abc - 1_2_3", "_")
     end
     
-    def test_handling_of_stuff
+    def test_other_separators_are_left_alone
       assert_slug("foo-+-b_a_r", "foo + b_a_r")
     end
     
