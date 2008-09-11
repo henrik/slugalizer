@@ -15,15 +15,15 @@ module Slugalizer
   extend self
   SEPARATORS = %w[- _ +]
   
-  def slugalize(text, word_separator = "-")
-    unless SEPARATORS.include?(word_separator)
+  def slugalize(text, separator = "-")
+    unless SEPARATORS.include?(separator)
       raise "Word separator must be one of #{SEPARATORS}"
     end
-    re_separator  = Regexp.escape(word_separator)
+    re_separator  = Regexp.escape(separator)
     ActiveSupport::Multibyte::Handlers::UTF8Handler.normalize(text.to_s, :kd).
       gsub(/[^\x00-\x7F]+/, '').                       # Remove anything non-ASCII entirely (e.g. diacritics).
-      gsub(/[^a-z0-9\-_\+]+/i, word_separator).        # Turn non-slug chars into the separator.
-      squeeze(word_separator).                         # No more than one of the separator in a row.
+      gsub(/[^a-z0-9\-_\+]+/i, separator).             # Turn non-slug chars into the separator.
+      squeeze(separator).                              # No more than one of the separator in a row.
       gsub(/^#{re_separator}|#{re_separator}$/i, '').  # Remove leading/trailing separator.
       downcase
   end
@@ -98,19 +98,19 @@ if __FILE__ == $0
       assert_slug("a-b", "a--b")
     end
     
-    def test_word_separator_parameter
+    def test_separator_parameter
       assert_slug("smorgasbord-ar-gott", "smörgåsbord är gott", "-")
       assert_slug("smorgasbord_ar_gott", "smörgåsbord är gott", "_")
       assert_slug("smorgasbord+ar+gott", "smörgåsbord är gott", "+")
     end
     
-    def test_invalid_word_separator
+    def test_invalid_separator
       assert_raise(RuntimeError) do
         Slugalizer.slugalize("smörgåsbord är gott", "@")
       end
     end
     
-    def test_handling_of_word_separator_chars
+    def test_handling_of_separator_chars
       assert_slug("abc_-_1_2_3", "abc - 1_2_3", "_")
     end
     
