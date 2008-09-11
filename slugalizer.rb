@@ -19,7 +19,7 @@ module Slugalizer
     unless SEPARATORS.include?(separator)
       raise "Word separator must be one of #{SEPARATORS}"
     end
-    re_separator= Regexp.escape(separator)
+    re_separator = Regexp.escape(separator)
     ActiveSupport::Multibyte::Handlers::UTF8Handler.normalize(text.to_s, :kd).
       gsub(/[^\x00-\x7F]+/, '').                       # Remove anything non-ASCII entirely (e.g. diacritics).
       gsub(/[^a-z0-9\-_\+]+/i, separator).             # Turn non-slug chars into the separator.
@@ -65,8 +65,7 @@ if __FILE__ == $0
     
     def test_no_leading_or_trailing_separator
       assert_slug("i-love-c++", "I love C++")
-      assert_slug("i-love-c++", "I love C++!!")
-      assert_slug("i-love-c", "I love C--!!")
+      assert_slug("i-love-c", "I love C--")
     end
     
     def test_accented_characters
