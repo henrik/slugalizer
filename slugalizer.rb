@@ -19,7 +19,7 @@ module Slugalizer
     unless SEPARATORS.include?(separator)
       raise "Word separator must be one of #{SEPARATORS}"
     end
-    re_separator  = Regexp.escape(separator)
+    re_separator= Regexp.escape(separator)
     ActiveSupport::Multibyte::Handlers::UTF8Handler.normalize(text.to_s, :kd).
       gsub(/[^\x00-\x7F]+/, '').                       # Remove anything non-ASCII entirely (e.g. diacritics).
       gsub(/[^a-z0-9\-_\+]+/i, separator).             # Turn non-slug chars into the separator.
