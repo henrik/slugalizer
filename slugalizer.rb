@@ -47,8 +47,8 @@ if __FILE__ == $0
       assert_slug("abc-1_2_3", "abc-1_2_3")
     end
     
-    def test_asciification
-      assert_slug("raksmorgas", "räksmörgås")
+    def test_accented_characters
+      assert_slug("acegiklnuo", "āčēģīķļņūö")
     end
     
     def test_downcasing
@@ -66,10 +66,6 @@ if __FILE__ == $0
     def test_no_leading_or_trailing_separator
       assert_slug("i-love-c++", "I love C++")
       assert_slug("i-love-c", "I love C--")
-    end
-    
-    def test_accented_characters
-      assert_slug("acegiklnuo", "āčēģīķļņūö")
     end
     
     def test_chinese_text
