@@ -38,6 +38,14 @@ if __FILE__ == $0
       assert_equal(expected_slug, Slugalizer.slugalize(*args))
     end
     
+    def with_kcode(kcode, &block)
+        old_kcode = $KCODE
+        $KCODE = kcode
+        block.call
+      ensure
+        $KCODE = old_kcode
+    end
+    
     def test_converting_to_string
       assert_slug("", nil)
       assert_slug("1", 1)
@@ -113,12 +121,16 @@ if __FILE__ == $0
       assert_slug("foo-+-b_a_r", "foo + b_a_r")
     end
     
+    def test_with_kcode_set_to_none
+      with_kcode('n') do
+        assert_slug("raksmorgas", "räksmörgås 中")
+      end
+    end
+    
     def test_with_kcode_set_to_utf_8
-      old_kcode = $KCODE
-      $KCODE = "u"
-      assert_slug("raksmorgas", "räksmörgås")
-    ensure
-      $KCODE = old_kcode
+      with_kcode('u') do
+        assert_slug("raksmorgas", "räksmörgås 中")
+      end
     end
 
   end
