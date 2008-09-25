@@ -20,12 +20,13 @@ module Slugalizer
       raise "Word separator must be one of #{SEPARATORS}"
     end
     re_separator = Regexp.escape(separator)
-    ActiveSupport::Multibyte::Handlers::UTF8Handler.normalize(text.to_s, :kd).
-      gsub(/[^\x00-\x7F]+/, '').                       # Remove anything non-ASCII entirely (e.g. diacritics).
-      gsub(/[^a-z0-9\-_\+]+/i, separator).             # Turn non-slug chars into the separator.
-      squeeze(separator).                              # No more than one of the separator in a row.
-      gsub(/^#{re_separator}|#{re_separator}$/i, '').  # Remove leading/trailing separator.
-      downcase
+    result = ActiveSupport::Multibyte::Handlers::UTF8Handler.normalize(text.to_s, :kd)
+    result.gsub!(/[^\x00-\x7F]+/, '')                      # Remove non-ASCII (e.g. diacritics).
+    result.gsub!(/[^a-z0-9\-_\+]+/i, separator)            # Turn non-slug chars into the separator.
+    result.gsub!(/#{re_separator}{2,}/, separator)         # No more than one of the separator in a row.
+    result.gsub!(/^#{re_separator}|#{re_separator}$/, '')  # Remove leading/trailing separator.
+    result.downcase!
+    result
   end
 end
 
