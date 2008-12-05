@@ -7,6 +7,7 @@ begin
   require "active_support/multibyte"
 rescue LoadError
   require "rubygems"
+  gem "activesupport", "< 2.2"
   require "active_support/multibyte"
 end
 

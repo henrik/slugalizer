@@ -15,6 +15,8 @@ Uses [`ActiveSupport::Multibyte::Handlers::UTF8Handler`](http://api.rubyonrails.
 
 This library has been incorporated into Ruby on Rails (as `ActiveSupport::Inflector#parameterize` and `String#parameterize`) since 2008-09-23 (Rails 2.2). The library is still of use outside Rails, or with earlier Rails versions. It also has more extensive tests than the code in Rails, and some additional error handling (limited set of word separators, handling non-string input).
 
+Slugalizer currently does not work with Active Support 2.2 and will load an earlier version.
+
 [Originally](http://termos.vemod.net/slugalizer) by [Christoffer Sawicki](http://termos.vemod.net/).
 
 Modified by [Henrik Nyh](http://henrik.nyh.se/).
