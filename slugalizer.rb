@@ -3,19 +3,11 @@
 # Slugalizer
 # http://github.com/henrik/slugalizer
 
-load_libs = lambda do
-  require "active_support/core_ext/array/extract_options"
-  Array.send(:include, ActiveSupport::CoreExtensions::Array::ExtractOptions)
-  require "active_support/core_ext/module/attribute_accessors"
-  require "active_support/multibyte"
-end
-
 begin
-  load_libs.call
+  require "active_support"
 rescue LoadError
   require "rubygems"
-  gem "activesupport"
-  load_libs.call
+  require "active_support"
 end
 
 module Slugalizer
@@ -28,7 +20,7 @@ module Slugalizer
       raise "Word separator must be one of #{SEPARATORS}"
     end
     re_separator = Regexp.escape(separator)
-    result = ActiveSupport::Multibyte::Chars.new(text.to_s).normalize(:kd).to_s
+    result = decompose(text.to_s)
     result.gsub!(/[^\x00-\x7F]+/, '')                      # Remove non-ASCII (e.g. diacritics).
     result.gsub!(/[^a-z0-9\-_\+]+/i, separator)            # Turn non-slug chars into the separator.
     result.gsub!(/#{re_separator}{2,}/, separator)         # No more than one of the separator in a row.
@@ -36,6 +28,17 @@ module Slugalizer
     result.downcase!
     result
   end
+  
+private
+
+  def decompose(text)
+    if defined?(ActiveSupport::Multibyte::Handlers)  # Active Support <2.2
+      ActiveSupport::Multibyte::Handlers::UTF8Handler.normalize(text, :kd).to_s
+    else  # ActiveSupport 2.2+
+      ActiveSupport::Multibyte::Chars.new(text).normalize(:kd).to_s
+    end
+  end
+  
 end
 
 
