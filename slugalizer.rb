@@ -7,6 +7,7 @@ begin
   require "active_support"
 rescue LoadError
   require "rubygems"
+  gem 'activesupport'
   require "active_support"
 end
 
